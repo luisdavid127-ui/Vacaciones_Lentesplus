@@ -89,7 +89,7 @@ class GestorDrive:
         if not archivo_bytes: return None
         try:
             creds = service_account.Credentials.from_service_account_info(
-                st.secrets["connections"]["gsheets"], scopes=['https://www.googleapis.com/auth/drive.file']
+                st.secrets["connections"]["gsheets"], scopes=['https://www.googleapis.com/auth/drive']
             )
             service = build('drive', 'v3', credentials=creds)
             file_meta = {'name': nombre_archivo, 'parents': [ID_CARPETA_DRIVE]}
@@ -522,4 +522,5 @@ elif rol in ["Super_Admin", "Admin"]:
 
     with t4: 
         render_mis_vacaciones(uid)
+
 
