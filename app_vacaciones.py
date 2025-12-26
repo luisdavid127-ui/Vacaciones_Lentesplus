@@ -373,7 +373,7 @@ def render_mis_vacaciones(user_id):
     with t1:
         with st.form(f"req_{user_id}"):
             c1, c2 = st.columns(2); i = c1.date_input("Inicio"); f = c2.date_input("Fin")
-            typ = st.radio("Tipo", ["Legal", "Beneficio"]); mot = st.text_input("Motivo")
+            typ = st.radio("Tipo", ["Legal", "Beneficio"]); mot = st.text_input("Motivo", key=f"motivo_solicitud_{user_id}")
             file = st.file_uploader("Soporte PDF", type="pdf")
             if st.form_submit_button("Enviar"):
                 ok, m = sys.solicitar(user_id, i, f, mot, typ=="Beneficio", file)
@@ -443,7 +443,7 @@ elif rol in ["Super_Admin", "Admin"]:
             lst = [k for k in sys.bd if k!="admin"]
             if lst:
                 sel = st.selectbox("Emp", lst, format_func=lambda x: sys.bd[x].nombre)
-                di = st.number_input("Días", 1, step=1); mo = st.text_input("Motivo")
+                di = st.number_input("Días", 1, step=1); mo = st.text_input("Motivo", key="motivo_pago_admin")
                 if st.button("Pagar"): sys.pagar(sel, di, mo); st.success("OK"); st.rerun()
 
         st.divider()
@@ -501,7 +501,7 @@ elif rol in ["Super_Admin", "Admin"]:
                         idt = st.number_input("ID", 0, len(e.historial)-1, step=1)
                         if 0<=idt<len(e.historial):
                             nd = st.number_input("Días solicitados", value=int(e.historial[idt].dias_tomados), step=1)
-                            nm = st.text_input("Motivo", value=e.historial[idt].motivo)
+                            nm = st.text_input("Motivo", value=e.historial[idt].motivo, key=f"motivo_edit_{sel}_{idt}")
                             if st.button("Guardar"): sys.mod_reg(sel, idt, nd, nm); st.success("OK"); st.rerun()
                     
                     if rol == "Super_Admin":
@@ -522,3 +522,4 @@ elif rol in ["Super_Admin", "Admin"]:
 
     with t4: 
         render_mis_vacaciones(uid)
+
